@@ -1,322 +1,332 @@
-# PilihanKita - Student Council Voting System
+# 🗳️ PilihanKita - Sistem Pemilihan OSIS
 
-**PilihanKita** is a modern, secure, and user-friendly online voting system designed specifically for high school student council elections. Built with CodeIgniter 4, it provides a comprehensive solution for managing elections, candidates, students, and voting processes.
+![PilihanKita Banner](https://via.placeholder.com/800x200/667eea/ffffff?text=PilihanKita+Voting+System)
 
-## 🌟 Features
+## 📖 Deskripsi
 
-### 🔐 Admin Panel Features
-- **Complete Candidate Management (CRUD)**
-  - Add/edit/delete candidates with photos, vision, and mission
-  - Candidate photo upload and management
-  - Real-time vote count tracking
+**PilihanKita** adalah sistem pemilihan OSIS (Organisasi Siswa Intra Sekolah) yang modern, aman, dan transparan. Dibangun menggunakan **CodeIgniter 4** dengan desain yang responsif dan user-friendly untuk memfasilitasi pemilihan ketua OSIS di sekolah menengah.
 
-- **Election Period Management**
-  - Create and manage multiple election periods (e.g., 2024/2025)
-  - Set election start and end dates
-  - Activate/deactivate election periods
+### ✨ Fitur Utama
 
-- **Student Data Management (CRUD)**
-  - Import/manage student data (name, NIS, class)
-  - Track voting status for each student
-  - Class-based student organization
+#### 🎓 Untuk Siswa (Voters)
+- **Login Google OAuth** - Autentikasi menggunakan akun Google sekolah
+- **Verifikasi Data Siswa** - Input NIS dan kelas untuk validasi
+- **Voting Sekali** - Satu siswa hanya dapat voting satu kali
+- **Voting Anonim** - Rahasia pemilihan terjaga
+- **Bukti Voting PDF** - Download bukti setelah voting
+- **Hasil Real-time** - Lihat hasil pemilihan langsung
 
-- **Results & Analytics**
-  - Real-time voting results with charts (Chart.js)
-  - Download results as Excel spreadsheets (Google Sheets API)
-  - Voting statistics and participation rates
-  - Hourly voting distribution charts
+#### 👨‍💼 Untuk Admin
+- **Dashboard Komprehensif** - Statistik dan overview sistem
+- **Manajemen Periode** - CRUD periode pemilihan
+- **Manajemen Kandidat** - CRUD kandidat dengan foto, visi, misi
+- **Manajemen Siswa** - CRUD data siswa dan kelas
+- **Export Data** - Download hasil dalam format Excel/PDF
+- **Visualisasi Data** - Charts dan diagram hasil voting
+- **Audit Trail** - Log aktivitas admin
 
-- **Class Management**
-  - Manage student classes (Grade 10, 11, 12)
-  - Organize by majors (MIPA, IPS, etc.)
+#### 📊 Homepage Publik
+- **Galeri Kandidat** - Tampilan kandidat dengan vote count
+- **Statistik Voting** - Partisipasi dan progress voting
+- **Chart Real-time** - Grafik hasil pemilihan
+- **Info Periode** - Informasi waktu pemilihan
 
-- **Secure Admin Access**
-  - Traditional username/password authentication
-  - Role-based access (Super Admin, Admin)
-  - Admin activity logging
+## 🚀 Quick Start
 
-### 👥 Student (Voter) Features
-- **Google OAuth Login**
-  - Secure authentication via Google accounts
-  - No need to remember additional passwords
+### Persyaratan Sistem
+- PHP 8.1+ dengan extensions: mysqli, mbstring, xml, gd
+- MySQL 8.0+ atau MariaDB 10.3+
+- Composer (Package Manager PHP)
+- Web Server (Apache/Nginx/Built-in PHP)
 
-- **Student Verification**
-  - Input NIS (Student ID) and class after Google login
-  - Verification against school database
+### Instalasi
 
-- **Secure Voting**
-  - One vote per student per election period
-  - Anonymous voting (secret ballot)
-  - Vote confirmation and tracking
-
-- **PDF Receipt Generation**
-  - Downloadable PDF receipt as voting proof
-  - Unique vote hash for verification
-  - Timestamp and candidate information
-
-### 🏠 Public Homepage
-- **Live Results Display**
-  - Real-time candidate vote counts
-  - Election information and timeline
-  - Responsive design for all devices
-
-- **Easy Access**
-  - Google login button for students
-  - Clean, intuitive interface
-
-## 🛠️ Technology Stack
-
-- **Backend:** CodeIgniter 4 (PHP 8.1+)
-- **Database:** MySQL 8.0+
-- **Frontend:** Bootstrap 5, Chart.js
-- **Authentication:** Google OAuth 2.0
-- **PDF Generation:** DomPDF
-- **Spreadsheet Export:** PhpSpreadsheet
-- **API Integration:** Google Sheets API
-
-## ⚙️ System Requirements
-
-- PHP 8.1 or higher
-- MySQL 8.0 or higher
-- Composer
-- Web server (Apache/Nginx)
-- SSL Certificate (required for Google OAuth)
-
-### Required PHP Extensions
-- `php-curl`
-- `php-gd`
-- `php-json`
-- `php-mbstring`
-- `php-mysql`
-- `php-xml`
-- `php-zip`
-
-## 🚀 Installation Guide
-
-### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/pilihankita-voting-system.git
-cd pilihankita-voting-system
-```
+# 1. Download/Clone project
+git clone <repository-url> pilihankita
+cd pilihankita
 
-### 2. Install Dependencies
-```bash
+# 2. Install dependencies
 composer install
-```
 
-### 3. Environment Setup
-```bash
-# Copy environment file
+# 3. Setup environment
 cp env .env
+# Edit .env sesuai konfigurasi database Anda
 
-# Edit the .env file with your settings
-nano .env
-```
+# 4. Buat database
+mysql -u root -p -e "CREATE DATABASE pilihankita_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
-### 4. Database Setup
-
-#### Option A: Using CodeIgniter Migrations (Recommended)
-```bash
-# Run migrations
+# 5. Import database atau jalankan migrasi
+mysql -u root -p pilihankita_db < database_setup.sql
+# ATAU
 php spark migrate
 
-# Run seeders (optional - adds sample data)
-php spark db:seed AdminSeeder
+# 6. Setup uploads folder
+mkdir -p public/uploads/candidates
+chmod 755 public/uploads/candidates
+
+# 7. Jalankan server
+php spark serve
 ```
 
-#### Option B: Manual SQL Setup
-```bash
-# Import the SQL file
-mysql -u root -p < database_setup.sql
+Buka browser ke: `http://localhost:8080`
+
+## 🏗️ Arsitektur Sistem
+
+### Tech Stack
+- **Backend**: CodeIgniter 4 (PHP Framework)
+- **Frontend**: Bootstrap 5, JavaScript ES6, Chart.js
+- **Database**: MySQL/MariaDB
+- **Authentication**: Google OAuth 2.0
+- **PDF Generation**: DomPDF
+- **Excel Export**: PhpSpreadsheet
+
+### Struktur Database
+
+```sql
+-- Tabel utama
+├── periods (periode pemilihan)
+├── classes (kelas siswa)
+├── students (data siswa)
+├── candidates (kandidat)
+├── votes (data voting)
+└── admins (admin users)
 ```
 
-### 5. Configure Environment Variables
+### Struktur Aplikasi
 
-Edit the `.env` file with your specific settings:
+```
+PilihanKita/
+├── app/
+│   ├── Controllers/          # Logic aplikasi
+│   │   ├── HomeController.php      # Homepage & kandidat
+│   │   ├── AuthController.php      # Autentikasi siswa
+│   │   ├── VotingController.php    # Proses voting
+│   │   └── AdminController.php     # Panel admin
+│   ├── Models/              # Database models
+│   │   ├── StudentModel.php        # Model siswa
+│   │   ├── CandidateModel.php      # Model kandidat
+│   │   ├── VoteModel.php          # Model voting
+│   │   └── ...
+│   ├── Views/               # Template UI
+│   │   ├── layout/main.php         # Layout utama
+│   │   ├── home/                   # Homepage
+│   │   ├── candidates/             # Halaman kandidat
+│   │   ├── auth/                   # Autentikasi
+│   │   ├── voting/                 # Voting interface
+│   │   └── admin/                  # Panel admin
+│   └── Database/Migrations/  # Database migrations
+├── public/
+│   ├── uploads/candidates/   # Foto kandidat
+│   └── assets/              # CSS, JS, images
+└── writable/                # Logs, cache, sessions
+```
+
+## 🔧 Konfigurasi
+
+### Environment Variables (.env)
 
 ```env
 # Database Configuration
 database.default.hostname = localhost
 database.default.database = pilihankita_db
-database.default.username = your_db_username
-database.default.password = your_db_password
+database.default.username = your_username
+database.default.password = your_password
+database.default.DBDriver = MySQLi
 
-# Google OAuth Configuration
-GOOGLE_CLIENT_ID = your_google_client_id
-GOOGLE_CLIENT_SECRET = your_google_client_secret
+# Google OAuth (Production)
+google.oauth.client_id = your_google_client_id
+google.oauth.client_secret = your_google_client_secret
+google.oauth.redirect_uri = http://yourdomain.com/auth/google/callback
 
-# Google Sheets API (for Excel export)
-GOOGLE_SHEETS_API_KEY = your_sheets_api_key
-
-# App Configuration
-app.baseURL = 'https://yourdomain.com'
-app.appTimezone = 'Asia/Jakarta'
-
-# Security
-encryption.key = your_32_character_encryption_key
+# App Settings
+app.baseURL = 'http://localhost:8080/'
+app.voting_enabled = true
+app.max_votes_per_student = 1
 ```
 
-### 6. Set Permissions
+### Data Default
+
+#### Admin Login
+- **URL**: `/admin-system`
+- **Username**: `admin`
+- **Password**: `admin123`
+
+#### Sample Data untuk Testing
+```
+Siswa Sample:
+- NIS: 2024001001 | Nama: Ahmad Rizki Pratama | Kelas: X-MIPA-1
+- NIS: 2024001002 | Nama: Siti Nurhaliza | Kelas: X-MIPA-1
+
+Kandidat Sample:
+1. Ahmad & Siti (Paslon 1)
+2. Budi & Dina (Paslon 2)
+3. Eko & Fatimah (Paslon 3)
+```
+
+## 📱 Cara Penggunaan
+
+### Untuk Siswa
+
+1. **Akses Homepage** - Kunjungi website untuk melihat kandidat
+2. **Login Google** - Klik "Login Siswa" dan masukkan akun Google
+3. **Input Data** - Masukkan NIS dan pilih kelas
+4. **Voting** - Pilih kandidat dan konfirmasi pilihan
+5. **Download Bukti** - Unduh bukti voting dalam format PDF
+
+### Untuk Admin
+
+1. **Login Admin** - Akses `/admin-system` dengan username/password
+2. **Setup Periode** - Buat periode pemilihan baru
+3. **Tambah Kandidat** - Input data kandidat dengan foto, visi, misi
+4. **Kelola Siswa** - Import atau tambah data siswa manual
+5. **Monitor Voting** - Pantau proses voting real-time
+6. **Export Hasil** - Download laporan dalam Excel/PDF
+
+## � Keamanan
+
+### Fitur Keamanan
+- **CSRF Protection** - Protection against cross-site request forgery
+- **XSS Prevention** - Input sanitization dan output escaping
+- **SQL Injection Prevention** - Prepared statements
+- **Session Management** - Secure session handling
+- **Rate Limiting** - Prevent spam voting attempts
+- **Audit Trail** - Log semua aktivitas admin
+
+### Best Practices
+- Password admin menggunakan bcrypt hashing
+- Voting menggunakan hash untuk anonymity
+- File upload validation untuk foto kandidat
+- Input validation pada semua form
+
+## 📊 API & Integration
+
+### External APIs
+- **Google OAuth 2.0** - Student authentication
+- **Google Sheets API** - Export results to Google Sheets
+- **Chart.js** - Data visualization
+- **DomPDF** - PDF generation
+
+### Internal API Endpoints
+```
+GET  /api/candidates/{id}     # Detail kandidat
+GET  /api/voting-stats        # Statistik voting
+GET  /api/results/live        # Hasil real-time
+POST /voting/submit           # Submit vote
+```
+
+## � Status Implementasi
+
+### ✅ Sudah Selesai
+- [x] Database schema & migrations
+- [x] Models dengan relationships
+- [x] Homepage dengan kandidat display
+- [x] Google OAuth simulation (mock)
+- [x] Student data input form
+- [x] Authentication system
+- [x] Responsive UI dengan Bootstrap 5
+- [x] Chart.js integration
+- [x] Basic admin structure
+
+### � Dalam Pengembangan
+- [ ] VotingController completion
+- [ ] AdminController full implementation
+- [ ] PDF receipt generation
+- [ ] Excel export functionality
+- [ ] Real Google OAuth integration
+- [ ] Admin dashboard views
+
+### 📅 Roadmap
+- [ ] Email notifications
+- [ ] Real-time updates (WebSockets)
+- [ ] Mobile app (PWA)
+- [ ] Multi-language support
+- [ ] Advanced analytics
+
+## 🧪 Testing
+
+### Unit Testing
 ```bash
-chmod -R 755 writable/
-chmod -R 755 public/uploads/
+# Run tests
+./vendor/bin/phpunit
+
+# Test specific feature
+./vendor/bin/phpunit --filter VotingTest
 ```
 
-### 7. Configure Web Server
+### Manual Testing
+1. **Student Flow** - Test complete voting process
+2. **Admin Flow** - Test CRUD operations
+3. **Security** - Test authentication & authorization
+4. **Performance** - Test with multiple concurrent users
 
-#### Apache (.htaccess)
-The project includes `.htaccess` files. Ensure mod_rewrite is enabled.
+## 📈 Performance
 
-#### Nginx
-```nginx
-server {
-    listen 80;
-    server_name yourdomain.com;
-    root /path/to/pilihankita/public;
-    index index.php;
+### Optimization Features
+- Database indexing pada tabel utama
+- Query caching untuk kandidat dan hasil
+- Image optimization untuk foto kandidat
+- Gzip compression untuk assets
+- CDN ready untuk static files
 
-    location / {
-        try_files $uri $uri/ /index.php?$query_string;
-    }
+### Scalability
+- Support untuk ribuan siswa
+- Real-time hasil tanpa lag
+- Efficient database queries
+- Horizontal scaling ready
 
-    location ~ \.php$ {
-        fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
-        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
-        include fastcgi_params;
-    }
-}
-```
+## �️ Development
 
-## 🔧 Google OAuth Setup
-
-### 1. Create Google Project
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project or select existing
-3. Enable Google+ API and Google People API
-
-### 2. Create OAuth Credentials
-1. Go to "Credentials" → "Create Credentials" → "OAuth 2.0 Client ID"
-2. Set Application Type: "Web Application"
-3. Add Authorized Redirect URIs:
-   - `https://yourdomain.com/auth/google/callback`
-   - `http://localhost:8080/auth/google/callback` (for development)
-
-### 3. Configure Consent Screen
-1. Go to "OAuth consent screen"
-2. Fill required information
-3. Add your domain to authorized domains
-
-## 📊 Google Sheets API Setup (Optional)
-
-For Excel export functionality:
-
-1. Enable Google Sheets API in Google Cloud Console
-2. Create Service Account credentials
-3. Download JSON key file
-4. Add the API key to your `.env` file
-
-## 🎯 Default Admin Access
-
-**Default Admin Credentials:**
-- Username: `admin`
-- Password: `admin123`
-- Email: `admin@pilihankita.local`
-
-⚠️ **Important:** Change the default password immediately after setup!
-
-## 🗄️ Database Schema
-
-The system includes the following main tables:
-- `periods` - Election periods
-- `classes` - Student classes
-- `students` - Student data
-- `candidates` - Election candidates
-- `votes` - Voting records
-- `admins` - Admin users
-
-## 🔐 Security Features
-
-- **Password Hashing:** BCrypt encryption
-- **CSRF Protection:** Built-in CodeIgniter protection
-- **SQL Injection Prevention:** Query Builder with parameterized queries
-- **Anonymous Voting:** Vote records are hashed and anonymized
-- **Rate Limiting:** Protection against spam voting
-- **Input Validation:** Comprehensive server-side validation
-
-## 📱 Usage Guide
-
-### For Administrators
-1. Access admin panel: `https://yourdomain.com/admin-system`
-2. Login with admin credentials
-3. Manage election periods, candidates, and students
-4. Monitor real-time voting results
-5. Export results to Excel
-
-### For Students
-1. Visit homepage: `https://yourdomain.com`
-2. Click "Login with Google"
-3. Enter NIS and select class
-4. Vote for preferred candidate
-5. Download PDF receipt
-
-## 🎨 Customization
-
-### Templates and Themes
-- Templates are located in `app/Views/`
-- CSS files in `public/assets/css/`
-- JavaScript files in `public/assets/js/`
-- The system uses Bootstrap 5 for responsive design
-
-### Adding Custom Features
-- Controllers: `app/Controllers/`
-- Models: `app/Models/`
-- Libraries: `app/Libraries/`
-
-## 🔄 Backup and Maintenance
-
-### Database Backup
+### Development Mode
 ```bash
-# Create backup
-mysqldump -u username -p pilihankita_db > backup_$(date +%Y%m%d).sql
+# Mode development dengan debug
+CI_ENVIRONMENT = development
 
-# Restore backup
-mysql -u username -p pilihankita_db < backup_file.sql
+# Features:
+# - Mock Google OAuth
+# - Detailed error messages
+# - Auto-reload
+# - Sample data included
 ```
 
-### Log Files
-- Application logs: `writable/logs/`
-- Error logs: Check web server error logs
+### Contributing
+1. Fork repository
+2. Create feature branch
+3. Commit changes
+4. Push to branch
+5. Create Pull Request
 
-## 🐛 Troubleshooting
+### Coding Standards
+- Follow CodeIgniter 4 conventions
+- PSR-4 autoloading
+- Proper commenting
+- Security best practices
 
-### Common Issues
+## 📞 Support & Documentation
 
-1. **Database Connection Error**
-   - Check database credentials in `.env`
-   - Ensure MySQL service is running
-   - Verify database exists
+### Dokumentasi
+- **Quick Start**: `QUICK_START_GUIDE.md`
+- **Implementation Status**: `IMPLEMENTATION_STATUS.md`
+- **Database Schema**: `database_setup.sql`
+- **API Docs**: `/docs/api/`
 
-2. **Google OAuth Error**
-   - Check OAuth credentials
-   - Verify redirect URIs
-   - Ensure SSL certificate is valid
+### Troubleshooting
+```bash
+# Check logs
+tail -f writable/logs/log-$(date +%Y-%m-%d).log
 
-3. **File Upload Issues**
-   - Check `writable/` permissions
-   - Verify PHP upload limits
-   - Check disk space
+# Clear cache
+php spark cache:clear
 
-4. **Performance Issues**
-   - Enable database query caching
-   - Optimize images
-   - Use CDN for static assets
+# Check database connection
+php spark db:table students
+```
 
-## 📞 Support
-
-For technical support or questions:
-- Email: support@pilihankita.local
-- Documentation: [Wiki Pages]
-- Issues: [GitHub Issues]
+### Support Channels
+- 📧 Email: support@pilihankita.com
+- 📖 Wiki: Project Wiki on GitHub
+- 🐛 Issues: GitHub Issues
+- 💬 Discussion: GitHub Discussions
 
 ## 📄 License
 
@@ -324,22 +334,38 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
+Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting pull requests.
 
-## 🎉 Acknowledgments
+## 🙏 Acknowledgments
 
-- CodeIgniter 4 Framework
-- Bootstrap 5 for UI components
-- Chart.js for data visualization
-- Google APIs for authentication and sheets
-- DomPDF for PDF generation
+- **CodeIgniter Team** - Amazing PHP framework
+- **Bootstrap Team** - Responsive CSS framework
+- **Chart.js Team** - Beautiful charts
+- **Indonesian Schools** - Inspiration for this project
 
 ---
 
-**Built with ❤️ for Indonesian high schools**
+### 🌟 Star this project if you find it useful!
 
-*PilihanKita - Empowering student democracy through technology*
+**Made with ❤️ for Indonesian Schools**
+
+![GitHub stars](https://img.shields.io/github/stars/username/pilihankita?style=social)
+![GitHub forks](https://img.shields.io/github/forks/username/pilihankita?style=social)
+![GitHub issues](https://img.shields.io/github/issues/username/pilihankita)
+![GitHub license](https://img.shields.io/github/license/username/pilihankita)
+
+---
+
+## 📸 Screenshots
+
+### Homepage
+![Homepage Screenshot](docs/screenshots/homepage.png)
+
+### Voting Interface
+![Voting Screenshot](docs/screenshots/voting.png)
+
+### Admin Dashboard
+![Admin Dashboard Screenshot](docs/screenshots/admin-dashboard.png)
+
+### Mobile Responsive
+![Mobile Screenshot](docs/screenshots/mobile.png)

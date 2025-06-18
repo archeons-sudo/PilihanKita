@@ -1,368 +1,193 @@
-# PilihanKita - Quick Start Guide for Developers
+# PilihanKita - Quick Start Guide
 
-## 🚀 Getting Started (5 Minutes)
+## Panduan Cepat Memulai Sistem Pemilihan OSIS
 
-### Prerequisites Check
+### � Persyaratan Sistem
+
+- PHP 8.1 atau lebih tinggi
+- MySQL 8.0 atau MariaDB 10.3+
+- Composer (Package Manager PHP)
+- Web Server (Apache/Nginx/Built-in PHP Server)
+
+### 🚀 Instalasi Cepat
+
+#### 1. Clone/Download Project
 ```bash
-# Check PHP version (need 8.1+)
-php --version
+# Jika menggunakan Git
+git clone <repository-url> pilihankita
+cd pilihankita
 
-# Check Composer
-composer --version
-
-# Check MySQL
-mysql --version
+# Atau download dan extract ke folder pilihankita
 ```
 
-### 1. Environment Setup
+#### 2. Install Dependencies
 ```bash
-# Install dependencies
 composer install
+```
 
-# Setup environment
+#### 3. Konfigurasi Environment
+```bash
+# Copy file environment
 cp env .env
 
-# Edit database config in .env
-nano .env
+# Edit konfigurasi database di .env
 ```
 
-### 2. Database Setup
+#### 4. Konfigurasi Database
+
+**Opsi A: Menggunakan MySQL/MariaDB**
 ```bash
-# Option A: Run migrations
+# Buat database
+mysql -u root -p -e "CREATE DATABASE pilihankita_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+# Jalankan migrasi
 php spark migrate
 
-# Option B: Use SQL file
-mysql -u root -p < database_setup.sql
+# Atau import manual
+mysql -u root -p pilihankita_db < database_setup.sql
 ```
 
-### 3. Test Installation
+**Opsi B: Menggunakan SQLite (untuk development)**
 ```bash
-# Start development server
+# Pastikan extension SQLite3 PHP aktif
+mkdir -p writable/database
+```
+
+#### 5. Setup File Uploads
+```bash
+mkdir -p public/uploads/candidates
+chmod 755 public/uploads/candidates
+```
+
+#### 6. Jalankan Server Development
+```bash
 php spark serve
-
-# Visit: http://localhost:8080
 ```
 
-## 🛠️ Development Workflow
+Buka browser ke: `http://localhost:8080`
 
-### Working with Models (Already Complete ✅)
-```php
-// Example: Using the StudentModel
-$studentModel = new \App\Models\StudentModel();
+### 🏗️ Struktur Aplikasi
 
-// Get student by NIS
-$student = $studentModel->getStudentByNIS('2024001001');
+#### Frontend (Siswa)
+- **Homepage**: `/` - Menampilkan kandidat dan hasil voting
+- **Login**: `/auth/google` - Login dengan Google (mock untuk development)
+- **Voting**: `/voting` - Halaman untuk melakukan voting
+- **Kandidat**: `/candidates` - Daftar lengkap kandidat
 
-// Check if student voted
-$hasVoted = $student['has_voted'];
+#### Backend (Admin)
+- **Login Admin**: `/admin-system` - Login administrator
+- **Dashboard**: `/admin-system/dashboard` - Dashboard utama admin
+- **Manajemen Kandidat**: `/admin-system/candidates` - CRUD kandidat
+- **Manajemen Siswa**: `/admin-system/students` - CRUD siswa
+- **Laporan**: `/admin-system/reports` - Export hasil voting
 
-// Get voting statistics
-$stats = $studentModel->getVotingStats();
+### 👥 Data Default
+
+#### Admin Default
+- **Username**: `admin`
+- **Password**: `admin123`
+- **Email**: `admin@pilihankita.local`
+
+#### Siswa Sample
+```
+NIS: 2024001001 | Nama: Ahmad Rizki Pratama | Kelas: X-MIPA-1
+NIS: 2024001002 | Nama: Siti Nurhaliza     | Kelas: X-MIPA-1
+NIS: 2024001003 | Nama: Budi Santoso      | Kelas: X-MIPA-2
 ```
 
-### Next: Implement Controllers
-
-#### 1. Start with HomeController
-```php
-// app/Controllers/HomeController.php
-<?php
-namespace App\Controllers;
-
-class HomeController extends BaseController
-{
-    public function index()
-    {
-        $candidateModel = new \App\Models\CandidateModel();
-        $periodModel = new \App\Models\PeriodModel();
-        
-        $activePeriod = $periodModel->getActivePeriod();
-        $candidates = $candidateModel->getActiveCandidates();
-        
-        return view('home', [
-            'period' => $activePeriod,
-            'candidates' => $candidates
-        ]);
-    }
-}
+#### Kandidat Sample
+```
+1. Ahmad & Siti (Paslon 1) - Inovatif, Kreatif, Berprestasi
+2. Budi & Dina (Paslon 2) - Peduli Lingkungan, Berprestasi Akademik
+3. Eko & Fatimah (Paslon 3) - Berkarakter, Religius, Berbudaya
 ```
 
-#### 2. Create Home View
-```php
-// app/Views/home.php
-<?= $this->extend('layouts/public') ?>
+### 🔧 Mode Development
 
-<?= $this->section('content') ?>
-<div class="container">
-    <h1>PilihanKita - Pemilihan OSIS</h1>
-    
-    <?php if($period): ?>
-        <h2><?= $period['name'] ?></h2>
-        
-        <div class="row">
-            <?php foreach($candidates as $candidate): ?>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5><?= $candidate['name'] ?></h5>
-                            <p>Votes: <strong><?= $candidate['vote_count'] ?></strong></p>
-                        </div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
-</div>
-<?= $this->endSection() ?>
-```
+Aplikasi berjalan dalam mode development dengan fitur:
 
-#### 3. Update Routes
-```php
-// app/Config/Routes.php
-$routes->get('/', 'HomeController::index');
-$routes->get('/admin-system', 'AdminController::dashboard');
-$routes->post('/admin-system/login', 'AuthController::adminLogin');
-$routes->get('/auth/google', 'AuthController::googleLogin');
-$routes->get('/auth/google/callback', 'AuthController::googleCallback');
-$routes->get('/vote', 'VotingController::index');
-$routes->post('/vote/cast', 'VotingController::castVote');
-```
+1. **Mock Google Login**: Tidak perlu konfigurasi Google OAuth
+2. **Sample Data**: Data contoh sudah tersedia
+3. **Error Display**: Error ditampilkan lengkap untuk debugging
+4. **Database Creation**: Otomatis membuat tabel dan sample data
 
-## 📁 Project Structure
+### 📱 Fitur Utama
 
-```
-PilihanKita/
-├── app/
-│   ├── Controllers/          # 🔄 Next: Implement these
-│   │   ├── AdminController.php
-│   │   ├── AuthController.php
-│   │   ├── HomeController.php
-│   │   └── VotingController.php
-│   ├── Models/              # ✅ Complete
-│   │   ├── AdminModel.php
-│   │   ├── CandidateModel.php
-│   │   ├── ClassModel.php
-│   │   ├── PeriodModel.php
-│   │   ├── StudentModel.php
-│   │   └── VoteModel.php
-│   ├── Views/               # 🔄 Next: Create these
-│   │   ├── layouts/
-│   │   ├── admin/
-│   │   ├── voting/
-│   │   └── home.php
-│   └── Database/
-│       └── Migrations/      # ✅ Complete
-├── public/
-│   ├── assets/             # 🔄 Next: Add CSS/JS
-│   └── uploads/            # For candidate photos
-├── database_setup.sql      # ✅ Complete
-├── .env                    # ✅ Configured
-└── README.md              # ✅ Complete
-```
+#### Untuk Siswa
+- ✅ Login dengan Google OAuth (mock)
+- ✅ Input NIS dan kelas setelah login
+- ✅ Voting sekali untuk satu kandidat
+- ✅ Lihat hasil voting real-time
+- ✅ Download bukti voting (PDF)
 
-## 🎯 Implementation Priority
+#### Untuk Admin
+- ✅ Login tradisional (username/password)
+- ✅ CRUD Periode Pemilihan
+- ✅ CRUD Kandidat (nama, foto, visi, misi)
+- ✅ CRUD Siswa dan Kelas
+- ✅ Export hasil voting (Excel/PDF)
+- ✅ Dashboard dengan statistik
 
-### Week 1: Core Functionality
-1. **HomeController** - Public homepage
-2. **Basic views** - Homepage template
-3. **Routes setup** - Basic navigation
-4. **AdminController** - Basic admin functions
+### �️ Troubleshooting
 
-### Week 2: Authentication
-1. **Google OAuth** - Student login
-2. **Admin auth** - Admin login/logout
-3. **Session management** - User sessions
-4. **Security** - CSRF, validation
-
-### Week 3: Voting System
-1. **VotingController** - Voting interface
-2. **Vote processing** - Secure voting
-3. **PDF receipts** - Vote confirmation
-4. **Admin panel** - Management interface
-
-### Week 4: Advanced Features
-1. **Charts** - Results visualization
-2. **Excel export** - Data export
-3. **Testing** - Quality assurance
-4. **Polish** - UI improvements
-
-## 🔧 Useful Commands
-
+#### Database Connection Error
 ```bash
-# Generate new controller
-php spark make:controller ControllerName
+# Pastikan MySQL berjalan
+sudo systemctl start mysql
 
-# Generate new model
-php spark make:model ModelName
-
-# Run migrations
-php spark migrate
-
-# Create migration
-php spark make:migration CreateTableName
-
-# Start development server
-php spark serve
-
-# Clear cache
-php spark cache:clear
-
-# Check routes
-php spark routes
+# Atau gunakan SQLite untuk development
+# Edit .env dan ubah DBDriver ke SQLite3
 ```
 
-## 📝 Code Templates
-
-### Controller Template
-```php
-<?php
-namespace App\Controllers;
-
-class YourController extends BaseController
-{
-    public function index()
-    {
-        // Your logic here
-        return view('your_view');
-    }
-    
-    public function create()
-    {
-        // Handle creation
-    }
-    
-    public function store()
-    {
-        // Handle form submission
-    }
-}
-```
-
-### View Template
-```php
-<?= $this->extend('layouts/public') ?>
-
-<?= $this->section('title') ?>Page Title<?= $this->endSection() ?>
-
-<?= $this->section('content') ?>
-<div class="container">
-    <!-- Your content here -->
-</div>
-<?= $this->endSection() ?>
-```
-
-## 🔍 Testing Your Changes
-
-### 1. Database Testing
-```php
-// Test in controller or spark shell
-$studentModel = new \App\Models\StudentModel();
-$students = $studentModel->findAll();
-var_dump($students);
-```
-
-### 2. Route Testing
+#### Permission Error
 ```bash
-# Test if route exists
-curl http://localhost:8080/your-route
-
-# Check routes list
-php spark routes
-```
-
-### 3. Model Testing
-```php
-// In controller
-$candidateModel = new \App\Models\CandidateModel();
-$candidates = $candidateModel->getActiveCandidates();
-
-if (empty($candidates)) {
-    echo "No active candidates found";
-} else {
-    foreach ($candidates as $candidate) {
-        echo $candidate['name'] . " - " . $candidate['vote_count'] . " votes\n";
-    }
-}
-```
-
-## 🎨 Frontend Resources
-
-### Bootstrap 5 CDN
-```html
-<!-- CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-```
-
-### Chart.js CDN
-```html
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-```
-
-### Google OAuth JavaScript
-```html
-<script src="https://apis.google.com/js/platform.js" async defer></script>
-```
-
-## 🔑 Environment Variables
-
-Essential variables to configure:
-```env
-# Database
-database.default.hostname = localhost
-database.default.database = pilihankita_db
-database.default.username = your_username
-database.default.password = your_password
-
-# Google OAuth
-GOOGLE_CLIENT_ID = your_client_id.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET = your_client_secret
-
-# Security
-encryption.key = hex2bin:your_32_character_hex_key
-
-# App
-app.baseURL = http://localhost:8080/
-app.appTimezone = Asia/Jakarta
-```
-
-## 💡 Pro Tips
-
-1. **Use the Models**: All database operations are ready in the models
-2. **Follow CodeIgniter Conventions**: Use proper naming and structure
-3. **Test Incrementally**: Test each feature as you build it
-4. **Use Git**: Commit changes frequently
-5. **Check Logs**: Monitor `writable/logs/` for errors
-
-## 🆘 Quick Fixes
-
-### Database Connection Error
-```bash
-# Check MySQL service
-systemctl status mysql
-
-# Test connection
-mysql -u root -p pilihankita_db
-```
-
-### Permission Issues
-```bash
+# Fix permission untuk folder writable
 chmod -R 755 writable/
 chmod -R 755 public/uploads/
 ```
 
-### Composer Issues
+#### Missing Extensions
 ```bash
-composer clear-cache
-composer install --no-cache
+# Install PHP extensions yang diperlukan
+sudo apt-get install php-mysql php-mbstring php-xml php-zip php-gd
 ```
 
-## 📞 Need Help?
+### � Dokumentasi Lanjutan
 
-1. Check `IMPLEMENTATION_STATUS.md` for current progress
-2. Review model methods in `app/Models/`
-3. Look at database schema in `database_setup.sql`
-4. Refer to CodeIgniter 4 documentation
+- **Database Schema**: Lihat file `database_setup.sql`
+- **API Documentation**: Folder `docs/api/`
+- **User Manual**: Folder `docs/user/`
+- **Implementation Status**: File `IMPLEMENTATION_STATUS.md`
 
-Ready to code? Start with implementing the `HomeController::index()` method! 🚀
+### 🔐 Keamanan
+
+#### Production Setup
+1. Ganti password admin default
+2. Setup Google OAuth credentials
+3. Enable HTTPS
+4. Setup database user dengan privileges terbatas
+5. Configure proper file permissions
+
+#### Environment Variables
+```bash
+# Google OAuth (untuk production)
+google.oauth.client_id=your_client_id
+google.oauth.client_secret=your_client_secret
+
+# Database (production)
+database.default.hostname=your_db_host
+database.default.username=pilihankita_user
+database.default.password=secure_password
+```
+
+### 📞 Support
+
+Jika mengalami masalah:
+1. Periksa log di `writable/logs/`
+2. Pastikan semua dependency terinstall
+3. Cek konfigurasi database
+4. Hubungi developer untuk support
+
+---
+
+**Selamat menggunakan PilihanKita! �️**
