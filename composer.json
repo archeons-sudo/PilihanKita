@@ -1,9 +1,9 @@
 {
-    "name": "codeigniter4/appstarter",
-    "description": "CodeIgniter4 starter app",
+    "name": "pilihankita/voting-system",
+    "description": "PilihanKita - Student Council Voting System for High School",
     "license": "MIT",
     "type": "project",
-    "homepage": "https://codeigniter.com",
+    "homepage": "https://github.com/pilihankita/voting-system",
     "support": {
         "forum": "https://forum.codeigniter.com/",
         "source": "https://github.com/codeigniter4/CodeIgniter4",
@@ -11,7 +11,10 @@
     },
     "require": {
         "php": "^8.1",
-        "codeigniter4/framework": "^4.0"
+        "codeigniter4/framework": "^4.0",
+        "google/apiclient": "^2.15",
+        "dompdf/dompdf": "^2.0",
+        "phpoffice/phpspreadsheet": "^1.29"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9",
@@ -38,6 +41,9 @@
         "sort-packages": true
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit",
+        "post-update-cmd": [
+            "@composer dump-autoload"
+        ]
     }
 }
