@@ -21,16 +21,16 @@ class VoteModel extends Model
         'student_id' => 'int',
         'candidate_id' => 'int',
         'period_id' => 'int',
-        'voted_at' => 'datetime',
+        // 'voted_at' => 'datetime',
     ];
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = true;
+    protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
+    // protected $createdField  = 'created_at';
+    // protected $updatedField  = 'updated_at';
+    // protected $deletedField  = 'deleted_at';
 
     // Validation
     protected $validationRules = [

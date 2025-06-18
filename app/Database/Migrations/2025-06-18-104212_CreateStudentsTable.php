@@ -59,8 +59,6 @@ class CreateStudentsTable extends Migration
         ]);
         
         $this->forge->addKey('id', true);
-        $this->forge->addKey('nis');
-        $this->forge->addKey('email');
         $this->forge->addForeignKey('class_id', 'classes', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('students');
     }

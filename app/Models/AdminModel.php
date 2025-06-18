@@ -19,7 +19,7 @@ class AdminModel extends Model
 
     protected array $casts = [
         'is_active' => 'boolean',
-        'last_login' => 'datetime',
+        // 'last_login' => 'datetime',
     ];
     protected array $castHandlers = [];
 
@@ -38,6 +38,7 @@ class AdminModel extends Model
         'full_name' => 'required|min_length[3]|max_length[100]',
         'role' => 'permit_empty|in_list[super_admin,admin]',
         'is_active' => 'permit_empty|in_list[0,1]',
+        'last_login' => 'permit_empty|valid_date',
     ];
     protected $validationMessages   = [
         'username' => [
@@ -114,6 +115,13 @@ class AdminModel extends Model
         return $admin;
     }
 
+    public function getAdminByUsername($username)
+    {
+        return $this->where('username', $username)
+                    ->orWhere('email', $username)
+                    ->first();
+    }
+
     public function updatePassword($adminId, $newPassword)
     {
         return $this->update($adminId, [
@@ -143,6 +151,7 @@ class AdminModel extends Model
             'full_name' => 'System Administrator',
             'role' => 'super_admin',
             'is_active' => 1,
+            'last_login' => null,
         ];
 
         return $this->insert($defaultAdmin);

@@ -62,8 +62,6 @@ class CreateAdminsTable extends Migration
         ]);
         
         $this->forge->addKey('id', true);
-        $this->forge->addKey('username');
-        $this->forge->addKey('email');
         $this->forge->createTable('admins');
     }
 
