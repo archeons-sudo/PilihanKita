@@ -30,24 +30,24 @@ app.CSPEnabled = false
 # DATABASE
 #--------------------------------------------------------------------
 
-database.default.hostname = localhost
-database.default.database = pilihankita_db
-database.default.username = root
+database.default.hostname = 
+database.default.database = /workspace/writable/database/pilihankita.db
+database.default.username = 
 database.default.password = 
-database.default.DBDriver = MySQLi
+database.default.DBDriver = SQLite3
 database.default.DBPrefix =
-database.default.port = 3306
+database.default.port = 
 
-# If you use MySQLi as tests, first update the values of Config\Database::$tests.
-database.tests.hostname = localhost
-database.tests.database = pilihankita_test
-database.tests.username = root
+# If you use SQLite for tests
+database.tests.hostname = 
+database.tests.database = /workspace/writable/database/pilihankita_test.db
+database.tests.username = 
 database.tests.password = 
-database.tests.DBDriver = MySQLi
+database.tests.DBDriver = SQLite3
 database.tests.DBPrefix =
-database.tests.charset = utf8mb4
-database.tests.DBCollat = utf8mb4_general_ci
-database.tests.port = 3306
+database.tests.charset = utf8
+database.tests.DBCollat = 
+database.tests.port = 
 
 #--------------------------------------------------------------------
 # ENCRYPTION

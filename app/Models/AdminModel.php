@@ -114,6 +114,13 @@ class AdminModel extends Model
         return $admin;
     }
 
+    public function getAdminByUsername($username)
+    {
+        return $this->where('username', $username)
+                    ->orWhere('email', $username)
+                    ->first();
+    }
+
     public function updatePassword($adminId, $newPassword)
     {
         return $this->update($adminId, [
