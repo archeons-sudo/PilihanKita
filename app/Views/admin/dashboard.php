@@ -1,4 +1,4 @@
-<?= $this->extend('layouts/public') ?>
+<?= $this->extend('layouts/admin') ?>
 
 <?= $this->section('content') ?>
 <div class="container-fluid">
@@ -8,6 +8,65 @@
                 <i class="bi bi-speedometer2 me-2"></i>Dashboard Admin
             </h1>
             <p class="text-muted">Selamat datang di panel admin PilihanKita. Pantau statistik pemilihan, kelola data, dan unduh hasil voting di sini.</p>
+        </div>
+    </div>
+    <!-- Quick Access Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <a href="<?= base_url('admin-system/candidates') ?>" class="text-decoration-none">
+                <div class="card h-100 shadow-sm border-0 hover-shadow">
+                    <div class="card-body text-center">
+                        <div class="mb-2">
+                            <i class="bi bi-person-badge fs-1 text-primary"></i>
+                        </div>
+                        <h6 class="fw-bold mb-1">Manajemen Kandidat</h6>
+                        <div class="text-muted small">Tambah, edit, dan hapus kandidat</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 mb-3">
+            <a href="<?= base_url('admin-system/students') ?>" class="text-decoration-none">
+                <div class="card h-100 shadow-sm border-0 hover-shadow">
+                    <div class="card-body text-center">
+                        <div class="mb-2">
+                            <i class="bi bi-people fs-1 text-success"></i>
+                        </div>
+                        <h6 class="fw-bold mb-1">Manajemen Siswa</h6>
+                        <div class="text-muted small">Kelola data siswa & kelas</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="<?= base_url('admin-system/classes') ?>" class="text-decoration-none">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-people-fill display-4 text-primary"></i>
+                        <h5 class="mt-3">Manajemen Kelas</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="<?= base_url('admin-system/periods') ?>" class="text-decoration-none">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-calendar2-week-fill display-4 text-success"></i>
+                        <h5 class="mt-3">Manajemen Periode</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="<?= base_url('admin-system/results') ?>" class="text-decoration-none">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-bar-chart-fill display-4 text-warning"></i>
+                        <h5 class="mt-3">Hasil Voting</h5>
+                    </div>
+                </div>
+            </a>
         </div>
     </div>
     <div class="row mb-4">
@@ -129,6 +188,7 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // Voting Chart
     <?php if (!empty($candidates)): ?>

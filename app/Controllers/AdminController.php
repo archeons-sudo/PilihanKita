@@ -188,6 +188,19 @@ class AdminController extends BaseController
         return view('admin/students', $data);
     }
 
+    public function createStudent()
+    {
+        $auth = $this->checkAdminAuth();
+        if ($auth) return $auth;
+
+        $classes = $this->classModel->findAll();
+        $data = [
+            'title' => 'Tambah Siswa',
+            'classes' => $classes
+        ];
+        return view('admin/students_form', $data);
+    }
+
     // Results & Reports
     public function results()
     {
@@ -196,14 +209,11 @@ class AdminController extends BaseController
 
         $activePeriod = $this->periodModel->getActivePeriod();
         $results = [];
-
         if ($activePeriod) {
             $results = $this->candidateModel->getVotingResults($activePeriod['id']);
         }
-
         $periods = $this->periodModel->orderBy('name', 'DESC')->findAll();
         $votingStats = $this->studentModel->getVotingStats();
-
         $data = [
             'title' => 'Hasil Voting',
             'activePeriod' => $activePeriod,
@@ -211,7 +221,6 @@ class AdminController extends BaseController
             'periods' => $periods,
             'stats' => $votingStats
         ];
-
         return view('admin/results', $data);
     }
 
@@ -344,5 +353,35 @@ class AdminController extends BaseController
                 'message' => $e->getMessage()
             ]);
         }
+    }
+
+    // Class Management
+    public function classes()
+    {
+        $auth = $this->checkAdminAuth();
+        if ($auth) return $auth;
+
+        $classes = $this->classModel->findAll();
+        $data = [
+            'title' => 'Manajemen Kelas',
+            'classes' => $classes
+        ];
+        return view('admin/classes', $data);
+    }
+
+    // Period Management
+    public function periods()
+    {
+        $auth = $this->checkAdminAuth();
+        if ($auth) return $auth;
+
+        $periods = $this->periodModel->orderBy('name', 'DESC')->findAll();
+        $activePeriod = $this->periodModel->getActivePeriod();
+        $data = [
+            'title' => 'Manajemen Periode',
+            'periods' => $periods,
+            'activePeriod' => $activePeriod
+        ];
+        return view('admin/periods', $data);
     }
 }

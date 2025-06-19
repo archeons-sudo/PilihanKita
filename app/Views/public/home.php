@@ -87,7 +87,7 @@
     <div class="row mb-5">
         <div class="col-lg-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="text-gradient fw-bold">
+                <h2 class="text-white fw-bold">
                     <i class="bi bi-bar-chart me-2"></i>
                     Hasil Voting Real-Time
                 </h2>
