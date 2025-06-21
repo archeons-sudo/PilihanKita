@@ -198,4 +198,55 @@ class VoteModel extends Model
                     ->orderBy('hour')
                     ->findAll();
     }
+
+    // New methods for profile functionality
+    public function getVotingHistoryByStudent($studentId)
+    {
+        return $this->select('votes.*, periods.name as period_name, periods.id as period_id, 
+                             candidates.name as candidate_name, candidates.vision as candidate_vision')
+                    ->join('periods', 'periods.id = votes.period_id')
+                    ->join('candidates', 'candidates.id = votes.candidate_id')
+                    ->where('votes.student_id', $studentId)
+                    ->orderBy('votes.voted_at', 'DESC')
+                    ->findAll();
+    }
+
+    public function getActivePeriod()
+    {
+        $periodModel = new \App\Models\PeriodModel();
+        return $periodModel->where('is_active', 1)
+                          ->where('start_date <=', date('Y-m-d'))
+                          ->where('end_date >=', date('Y-m-d'))
+                          ->first();
+    }
+
+    public function getVoteReceipt($studentId, $periodId)
+    {
+        $vote = $this->select('votes.*, students.name as student_name, students.nis, students.class_id,
+                             candidates.name as candidate_name, candidates.vision as candidate_vision,
+                             periods.name as period_name, classes.name as class_name')
+                    ->join('students', 'students.id = votes.student_id')
+                    ->join('candidates', 'candidates.id = votes.candidate_id')
+                    ->join('periods', 'periods.id = votes.period_id')
+                    ->join('classes', 'classes.id = students.class_id')
+                    ->where('votes.student_id', $studentId)
+                    ->where('votes.period_id', $periodId)
+                    ->first();
+
+        if ($vote) {
+            return [
+                'vote_id' => $vote['id'],
+                'vote_hash' => $vote['vote_hash'],
+                'vote_date' => $vote['voted_at'],
+                'student_name' => $vote['student_name'],
+                'student_nis' => $vote['nis'],
+                'class_name' => $vote['class_name'],
+                'period_name' => $vote['period_name'],
+                'candidate_name' => $vote['candidate_name'],
+                'candidate_vision' => $vote['candidate_vision']
+            ];
+        }
+
+        return null;
+    }
 }

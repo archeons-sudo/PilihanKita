@@ -94,6 +94,10 @@ class HomeController extends BaseController
                 throw new \Exception('Kandidat tidak ditemukan');
             }
 
+            // Format vision & mission agar line break rapi di modal
+            $candidate['vision'] = nl2br(esc($candidate['vision']));
+            $candidate['mission'] = nl2br(esc($candidate['mission']));
+
             return $this->response->setJSON([
                 'success' => true,
                 'candidate' => $candidate

@@ -82,7 +82,7 @@ $this->section('content');
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <tr><td colspan="4" class="text-center">Belum ada hasil voting.</td></tr>
+                            <tr><td colspan="4" class="text-center text-muted">Belum ada hasil voting atau tidak ada aktivitas di periode ini.</td></tr>
                         <?php endif; ?>
                     </tbody>
                 </table>

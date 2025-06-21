@@ -104,6 +104,17 @@ class CandidateModel extends Model
         return false;
     }
 
+    public function decrementVoteCount($candidateId)
+    {
+        $candidate = $this->find($candidateId);
+        if ($candidate && $candidate['vote_count'] > 0) {
+            return $this->update($candidateId, [
+                'vote_count' => $candidate['vote_count'] - 1
+            ]);
+        }
+        return false;
+    }
+
     public function getVotingResults($periodId = null)
     {
         if ($periodId === null) {

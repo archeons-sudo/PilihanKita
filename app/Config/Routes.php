@@ -28,7 +28,18 @@ $routes->group('auth', [], function($routes) {
     $routes->get('verify', 'AuthController::verify');
     $routes->post('verify/process', 'AuthController::processVerification');
     $routes->get('logout', 'AuthController::logout');
-    $routes->get('profile', 'AuthController::profile');
+});
+
+// ========================================
+// PROFILE ROUTES
+// ========================================
+
+$routes->get('profile', 'ProfileController::index');
+$routes->group('profile', [], function($routes) {
+    $routes->get('/', 'ProfileController::index');
+    $routes->post('update', 'ProfileController::updateProfile');
+    $routes->post('change-password', 'ProfileController::changePassword');
+    $routes->get('download-receipt/(:num)', 'ProfileController::downloadVoteReceipt/$1');
 });
 
 // ========================================

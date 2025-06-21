@@ -19,8 +19,8 @@ class PeriodModel extends Model
 
     protected array $casts = [
         'is_active' => 'boolean',
-        'start_date' => 'datetime',
-        'end_date' => 'datetime',
+        // 'start_date' => 'datetime',
+        // 'end_date' => 'datetime',
     ];
     protected array $castHandlers = [];
 
