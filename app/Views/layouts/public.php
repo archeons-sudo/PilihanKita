@@ -252,7 +252,7 @@
                             Kandidat
                         </a>
                     </li>
-                    <?php if (session()->get('student_logged_in')): ?>
+                    <?php if (session()->get('user_type') === 'student' && session()->get('user_id')): ?>
                         <li class="nav-item">
                             <a class="nav-link" href="<?= base_url('voting') ?>">
                                 <i class="bi bi-hand-index me-1"></i>
@@ -265,8 +265,8 @@
                                 <?= session()->get('student_name') ?>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="<?= base_url('auth/profile') ?>">
-                                    <i class="bi bi-person me-2"></i>Profile
+                                <li><a class="dropdown-item" href="<?= base_url('profile') ?>">
+                                    <i class="bi bi-person me-2"></i>My Profile
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="<?= base_url('auth/logout') ?>">

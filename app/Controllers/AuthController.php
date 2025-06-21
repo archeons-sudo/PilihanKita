@@ -85,14 +85,15 @@ class AuthController extends BaseController
             // Student ditemukan, set session
             $studentData = $this->studentModel->getStudentWithClass($student['id']);
             session()->set([
+                'user_id'           => $student['id'],
+                'user_type'         => 'student',
                 'student_logged_in' => true,
-                'student_id' => $student['id'],
-                'student_name' => $student['name'],
-                'student_email' => $student['email'],
-                'student_nis' => $student['nis'],
-                'student_class' => $studentData['class_name'],
+                'student_name'      => $student['name'],
+                'student_email'     => $student['email'],
+                'student_nis'       => $student['nis'],
+                'student_class'     => $studentData['class_name'],
                 'student_has_voted' => $student['has_voted'],
-                'google_user' => $googleUser
+                'google_user'       => $googleUser
             ]);
             return redirect()->to(base_url())->with('success', 'Selamat datang, ' . $student['name'] . '!');
         } catch (\Exception $e) {
@@ -177,13 +178,14 @@ class AuthController extends BaseController
 
             // Set session
             session()->set([
-                'student_logged_in' => true,
-                'student_id' => $studentId,
-                'student_name' => $student['name'],
-                'student_email' => $student['email'],
-                'student_nis' => $student['nis'],
-                'student_class' => $student['class_name'],
-                'student_has_voted' => $student['has_voted']
+                'user_id'             => $studentId,
+                'user_type'           => 'student',
+                'student_logged_in'   => true,
+                'student_name'        => $student['name'],
+                'student_email'       => $student['email'],
+                'student_nis'         => $student['nis'],
+                'student_class'       => $student['class_name'],
+                'student_has_voted'   => $student['has_voted']
             ]);
 
             // Remove temporary Google session
@@ -199,19 +201,10 @@ class AuthController extends BaseController
 
     public function logout()
     {
-        // Remove all student session data
-        session()->remove([
-            'student_logged_in',
-            'student_id',
-            'student_name', 
-            'student_email',
-            'student_nis',
-            'student_class',
-            'student_has_voted',
-            'google_user'
-        ]);
+        // Hancurkan semua data sesi
+        session()->destroy();
 
-        return redirect()->to(base_url())->with('success', 'Anda telah logout');
+        return redirect()->to(base_url())->with('success', 'Anda berhasil logout.');
     }
 
     public function profile()

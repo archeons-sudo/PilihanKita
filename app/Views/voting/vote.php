@@ -113,7 +113,7 @@
                                     Misi
                                 </h6>
                                 <div class="text-muted small">
-                                    <?= $candidate['mission'] ?>
+                                    <?= nl2br(esc($candidate['mission'])) ?>
                                 </div>
                             </div>
                             
@@ -386,14 +386,6 @@
         setTimeout(() => {
             document.getElementById('votingForm').submit();
         }, 1000);
-    });
-    
-    // Prevent accidental page leave
-    window.addEventListener('beforeunload', function(e) {
-        if (selectedCandidate && !confirm('Anda yakin ingin meninggalkan halaman? Pilihan voting Anda akan hilang.')) {
-            e.preventDefault();
-            e.returnValue = '';
-        }
     });
     
     // Auto-focus and scroll to candidates

@@ -13,8 +13,8 @@
                         <img src="<?= base_url($candidate['photo'] ? 'uploads/candidates/' . $candidate['photo'] : 'https://via.placeholder.com/300x250?text=Foto+Kandidat') ?>" class="card-img-top" alt="<?= esc($candidate['name']) ?>">
                         <div class="card-body">
                             <h5 class="card-title"><?= esc($candidate['name']) ?></h5>
-                            <p class="card-text"><strong>Visi:</strong> <?= esc($candidate['vision']) ?></p>
-                            <p class="card-text"><strong>Misi:</strong> <?= esc($candidate['mission']) ?></p>
+                            <p class="card-text"><strong>Visi:</strong> <?= nl2br(esc($candidate['vision'])) ?></p>
+                            <p class="card-text"><strong>Misi:</strong> <?= nl2br(esc($candidate['mission'])) ?></p>
                             <span class="badge bg-primary"><?= number_format($candidate['vote_count']) ?> suara</span>
                         </div>
                     </div>
