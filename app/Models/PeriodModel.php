@@ -74,10 +74,21 @@ class PeriodModel extends Model
 
     public function setActivePeriod($periodId)
     {
-        // Deactivate all periods first
-        $this->update(null, ['is_active' => 0]);
-        
-        // Activate the specified period
-        return $this->update($periodId, ['is_active' => 1]);
+        $db = \Config\Database::connect();
+        $db->transStart();
+
+        try {
+            $builder = $db->table($this->table);
+            $builder->set('is_active', 0);
+            $builder->update();
+            
+            $this->update($periodId, ['is_active' => 1]);
+
+            $db->transComplete();
+            return $db->transStatus();
+        } catch (\Exception $e) {
+            log_message('error', 'Set Active Period Error: ' . $e->getMessage());
+            return false;
+        }
     }
 }
