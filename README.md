@@ -53,7 +53,7 @@ php spark migrate
 php spark db:seed DatabaseSeeder
 ```
 
-### 6. Buka `xampp`, lalu pada module `apache` klik button `config` dan buka file `php.ini`, dan dengan code dibawah ini.
+### 6. Buka `xampp`, lalu pada module `apache` klik button `config` dan buka file `php.ini`, lalu cari bagian ini dan samakan dengan code di bawah ini.
 
 ```bash
 extension=curl
