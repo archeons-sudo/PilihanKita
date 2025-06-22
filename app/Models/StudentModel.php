@@ -115,4 +115,10 @@ class StudentModel extends Model
             'voting_percentage' => $totalStudents > 0 ? round(($votedStudents / $totalStudents) * 100, 2) : 0,
         ];
     }
+
+    public function findStudent($studentId)
+    {
+        return $this->select('id, nis, name, email, class_id, google_id, has_voted, created_at, updated_at')
+                    ->find($studentId);
+    }
 }
