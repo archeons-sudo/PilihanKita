@@ -74,17 +74,26 @@ class VotingController extends BaseController
                 throw new \Exception('Sesi login telah berakhir');
             }
 
-            // Check if student has already voted
+            // Ensure student_id is present in session
             $studentId = session()->get('student_id');
-            $student = $this->studentModel->find($studentId);
+            if (!$studentId) {
+                log_message('error', 'Voting: Student ID not found in session');
+                throw new \Exception('Sesi login siswa tidak ditemukan. Silakan login ulang.');
+            }
+
+            // Check if student has already voted
+            $student = $this->studentModel->findStudent($studentId);
             log_message('debug', 'Voting: Data student = ' . json_encode($student));
+            log_message('debug', 'Voting: Student ID = ' . $studentId);
+            log_message('debug', 'Voting: Student fields = ' . json_encode(array_keys($student ?? [])));
             
             if (!$student) {
                 log_message('error', 'Voting: Data siswa tidak ditemukan');
                 throw new \Exception('Data siswa tidak ditemukan');
             }
 
-            if ($student['has_voted']) {
+            // Check if has_voted field exists and is true
+            if (isset($student['has_voted']) && $student['has_voted']) {
                 log_message('error', 'Voting: Siswa sudah voting sebelumnya');
                 throw new \Exception('Anda sudah melakukan voting sebelumnya');
             }

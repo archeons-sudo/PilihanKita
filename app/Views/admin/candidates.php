@@ -47,8 +47,13 @@
                                         <td class="text-stats-blue" style="max-width: 180px; white-space: pre-line;"><?= esc($candidate['mission']) ?></td>
                                         <td class="text-stats-purple"><?= esc($candidate['period_name']) ?></td>
                                         <td>
-                                            <a href="<?= base_url('admin-system/candidates/edit/' . $candidate['id']) ?>" class="btn btn-sm btn-warning me-1" style="background: var(--stats-yellow); border: none;"><i class="bi bi-pencil"></i></a>
-                                            <a href="<?= base_url('admin-system/candidates/delete/' . $candidate['id']) ?>" class="btn btn-sm btn-danger" style="background: var(--accent-color); border: none;" onclick="return confirm('Yakin ingin menghapus kandidat ini?')"><i class="bi bi-trash"></i></a>
+
+                                            <a href="<?= base_url('admin-system/candidates/edit/' . $candidate['id']) ?>" class="btn btn-sm btn-warning me-1"><i class="bi bi-pencil"></i></a>
+                                            <form action="<?= base_url('admin-system/candidates/delete/' . $candidate['id']) ?>" method="post" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus kandidat ini?')">
+                                                <?= csrf_field() ?>
+                                                <button type="submit" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                                            </form>
+
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

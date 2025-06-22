@@ -86,6 +86,7 @@ class AuthController extends BaseController
             $studentData = $this->studentModel->getStudentWithClass($student['id']);
             session()->set([
                 'user_id'           => $student['id'],
+                'student_id'        => $student['id'],
                 'user_type'         => 'student',
                 'student_logged_in' => true,
                 'student_name'      => $student['name'],
@@ -179,6 +180,7 @@ class AuthController extends BaseController
             // Set session
             session()->set([
                 'user_id'             => $studentId,
+                'student_id'          => $studentId,
                 'user_type'           => 'student',
                 'student_logged_in'   => true,
                 'student_name'        => $student['name'],
