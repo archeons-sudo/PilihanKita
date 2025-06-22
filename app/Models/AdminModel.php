@@ -30,7 +30,7 @@ class AdminModel extends Model
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
-    // Validation
+    
     protected $validationRules = [
         'username' => 'required|min_length[3]|max_length[50]|is_unique[admins.username,id,{id}]',
         'email' => 'required|valid_email|is_unique[admins.email,id,{id}]',
@@ -68,7 +68,7 @@ class AdminModel extends Model
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
-    // Callbacks
+    
     protected $allowCallbacks = true;
     protected $beforeInsert   = ['hashPassword'];
     protected $afterInsert    = [];
@@ -98,7 +98,7 @@ class AdminModel extends Model
             // Update last login
             $this->update($admin['id'], ['last_login' => date('Y-m-d H:i:s')]);
             
-            // Remove password from return data
+            
             unset($admin['password']);
             return $admin;
         }
@@ -139,7 +139,7 @@ class AdminModel extends Model
 
     public function createDefaultAdmin()
     {
-        // Check if any admin exists
+        
         if ($this->countAll() > 0) {
             return false;
         }

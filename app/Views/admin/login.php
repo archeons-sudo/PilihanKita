@@ -450,18 +450,18 @@
             const loginBtn = document.getElementById('loginBtn');
             const originalText = loginBtn.innerHTML;
             
-            // Show loading state
+            
             loginBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Memproses...';
             loginBtn.disabled = true;
             
-            // Reset after 10 seconds in case of error
+            
             setTimeout(() => {
                 loginBtn.innerHTML = originalText;
                 loginBtn.disabled = false;
             }, 10000);
         });
         
-        // Quick fill demo credentials
+        
         document.addEventListener('keydown', function(e) {
             if (e.ctrlKey && e.key === 'd') {
                 e.preventDefault();
@@ -470,14 +470,14 @@
             }
         });
         
-        // Focus management
+        
         document.addEventListener('DOMContentLoaded', function() {
             const usernameField = document.getElementById('username');
             if (usernameField && !usernameField.value) {
                 usernameField.focus();
             }
             
-            // Create particles dynamically
+            
             function createParticle() {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
@@ -495,10 +495,10 @@
                 }, 6000);
             }
             
-            // Generate particles periodically
+            
             setInterval(createParticle, 2000);
             
-            // Initial particles
+            
             for (let i = 0; i < 10; i++) {
                 setTimeout(createParticle, i * 200);
             }

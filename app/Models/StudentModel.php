@@ -30,7 +30,7 @@ class StudentModel extends Model
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
-    // Validation
+    
     protected $validationRules = [
         'nis' => 'required|min_length[6]|max_length[20]|is_unique[students.nis,id,{id}]',
         'name' => 'required|min_length[3]|max_length[100]',
@@ -65,7 +65,7 @@ class StudentModel extends Model
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
-    // Callbacks
+    
     protected $allowCallbacks = true;
     protected $beforeInsert   = [];
     protected $afterInsert    = [];

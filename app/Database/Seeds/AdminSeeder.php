@@ -33,7 +33,7 @@ class AdminSeeder extends Seeder
             ]
         ];
 
-        // Using Query Builder to insert data
+        
         $this->db->table('admins')->insertBatch($data);
         
         echo "Admin data seeded successfully!\n";

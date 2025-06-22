@@ -828,7 +828,7 @@
     
     <!-- Global Scripts -->
     <script>
-        // Enhanced Intersection Observer for animations
+        
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -844,12 +844,12 @@
             });
         }, observerOptions);
         
-        // Observe elements for animation
+        
         document.querySelectorAll('.card, .candidate-card').forEach(el => {
             observer.observe(el);
         });
         
-        // Navbar scroll effect
+        
         let lastScrollTop = 0;
         const navbar = document.querySelector('.navbar');
         
@@ -862,7 +862,7 @@
                 navbar.style.transform = 'translateY(0)';
             }
             
-            // Add glassmorphism effect on scroll
+            
             if (scrollTop > 50) {
                 navbar.style.background = 'rgba(26, 29, 35, 0.98)';
                 navbar.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.4)';
@@ -874,7 +874,7 @@
             lastScrollTop = scrollTop;
         });
         
-        // Smooth reveal animation for elements
+        
         const revealElements = document.querySelectorAll('.card, .candidate-card, .btn');
         revealElements.forEach((el, index) => {
             el.style.opacity = '0';
@@ -887,7 +887,7 @@
             }, index * 150);
         });
         
-        // Parallax effect for hero section
+        
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
             const heroSection = document.querySelector('.hero-section');
@@ -898,7 +898,7 @@
             }
         });
         
-        // Dynamic particle generation
+        
         function createParticle() {
             const particle = document.createElement('div');
             particle.className = 'particle';
@@ -916,10 +916,10 @@
             }, 6000);
         }
         
-        // Generate particles periodically
+        
         setInterval(createParticle, 2000);
         
-        // Enhanced button hover effects
+        
         document.querySelectorAll('.btn').forEach(btn => {
             btn.addEventListener('mouseenter', function(e) {
                 const ripple = document.createElement('span');
@@ -941,7 +941,7 @@
             });
         });
         
-        // Card tilt effect
+        
         document.querySelectorAll('.card, .candidate-card').forEach(card => {
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
@@ -962,7 +962,7 @@
             });
         });
         
-        // Progress bar animation
+        
         function animateProgressBars() {
             const progressBars = document.querySelectorAll('.progress-bar');
             progressBars.forEach(bar => {
@@ -976,7 +976,7 @@
             });
         }
         
-        // Initialize progress bars when they come into view
+        
         const progressObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -990,7 +990,7 @@
             progressObserver.observe(progress);
         });
         
-        // Enhanced toast notification function
+        
         function showToast(message, type = 'success') {
             const Toast = Swal.mixin({
                 toast: true,
@@ -1016,7 +1016,7 @@
             });
         }
         
-        // Loading spinner utility
+        
         function showLoading(element) {
             const spinner = document.createElement('div');
             spinner.className = 'loading-spinner mx-auto';
@@ -1024,7 +1024,7 @@
             element.appendChild(spinner);
         }
         
-        // Typewriter effect for text
+        
         function typeWriter(element, text, speed = 50) {
             let i = 0;
             element.innerHTML = '';
@@ -1040,7 +1040,7 @@
             type();
         }
         
-        // Initialize typewriter for hero text
+        
         const heroTitle = document.querySelector('.hero-section h1');
         if (heroTitle) {
             const originalText = heroTitle.textContent;
@@ -1049,7 +1049,7 @@
             }, 1000);
         }
         
-        // Enhanced voting confirmation
+        
         function confirmVote(candidateName, candidateId) {
             Swal.fire({
                 title: 'Konfirmasi Pilihan',
@@ -1075,13 +1075,13 @@
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Process vote here
+                    
                     showToast(`Terima kasih! Pilihan Anda untuk ${candidateName} telah berhasil disimpan.`, 'success');
                 }
             });
         }
         
-        // Show flash messages with enhanced styling
+        
         <?php if (session()->getFlashdata('success')): ?>
             showToast('<?= session()->getFlashdata('success') ?>', 'success');
         <?php endif; ?>
@@ -1094,7 +1094,7 @@
             showToast('<?= session()->getFlashdata('warning') ?>', 'warning');
         <?php endif; ?>
         
-        // Add ripple effect styles
+        
         const style = document.createElement('style');
         style.textContent = `
             .ripple {
@@ -1121,9 +1121,9 @@
         `;
         document.head.appendChild(style);
         
-        // Initialize all animations and effects
+        
         document.addEventListener('DOMContentLoaded', function() {
-            // Add fade-in class to body for smooth page load
+            
             document.body.style.opacity = '0';
             document.body.style.transition = 'opacity 0.5s ease';
             
@@ -1131,7 +1131,7 @@
                 document.body.style.opacity = '1';
             }, 100);
             
-            // Initialize tooltip if Bootstrap is loaded
+            
             if (typeof bootstrap !== 'undefined') {
                 const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
                 tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -1140,7 +1140,7 @@
             }
         });
         
-        // Smooth scrolling for anchor links
+        
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();

@@ -22,14 +22,14 @@ class ClassModel extends Model
     ];
     protected array $castHandlers = [];
 
-    // Dates
+    
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
-    // Validation
+    
     protected $validationRules = [
         'name' => 'required|min_length[1]|max_length[50]',
         'grade' => 'required|integer|in_list[10,11,12]',
@@ -52,7 +52,7 @@ class ClassModel extends Model
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
-    // Callbacks
+    
     protected $allowCallbacks = true;
     protected $beforeInsert   = [];
     protected $afterInsert    = [];

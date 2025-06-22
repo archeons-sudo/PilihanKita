@@ -32,7 +32,7 @@ class AdminController extends BaseController
         $this->classModel = new ClassModel();
     }
 
-    // Middleware check for admin authentication
+    
     protected function checkAdminAuth()
     {
         if (!session()->get('admin_logged_in')) {
@@ -46,7 +46,7 @@ class AdminController extends BaseController
         $auth = $this->checkAdminAuth();
         if ($auth) return $auth;
 
-        // Get statistics
+        
         $stats = [
             'total_students' => $this->studentModel->countAll(),
             'total_candidates' => $this->candidateModel->where('is_active', 1)->countAllResults(),
@@ -54,14 +54,14 @@ class AdminController extends BaseController
             'total_classes' => $this->classModel->countAll(),
         ];
 
-        // Get voting statistics
+        
         $votingStats = $this->studentModel->getVotingStats();
         $stats = array_merge($stats, $votingStats);
 
-        // Get active period
+        
         $activePeriod = $this->periodModel->getActivePeriod();
 
-        // Get recent votes (last 10)
+        
         $recentVotes = $this->voteModel
             ->select('votes.*, students.name as student_name, students.nis, candidates.name as candidate_name')
             ->join('students', 'students.id = votes.student_id')
@@ -70,7 +70,7 @@ class AdminController extends BaseController
             ->limit(10)
             ->findAll();
 
-        // Get candidates with vote counts
+        
         $candidates = $this->candidateModel->getActiveCandidates();
 
         $data = [
@@ -84,7 +84,7 @@ class AdminController extends BaseController
         return view('admin/dashboard', $data);
     }
 
-    // Candidate Management
+    
     public function candidates()
     {
         $auth = $this->checkAdminAuth();
@@ -137,7 +137,7 @@ class AdminController extends BaseController
                 return redirect()->back()->withInput()->with('error', 'Validasi gagal: ' . implode(', ', $this->validator->getErrors()));
             }
 
-            // Handle photo upload
+            
             $photo = $this->request->getFile('photo');
             $photoName = null;
 
@@ -232,7 +232,7 @@ class AdminController extends BaseController
         return redirect()->to(base_url('admin-system/candidates'))->with('success', 'Kandidat berhasil dihapus');
     }
 
-    // Student Management
+    
     public function students()
     {
         $auth = $this->checkAdminAuth();
@@ -344,7 +344,7 @@ class AdminController extends BaseController
                 $this->candidateModel->decrementVoteCount($vote['candidate_id']);
             }
 
-            // Hapus siswa (dan vote-nya via ON DELETE CASCADE)
+            
             $this->studentModel->delete($id);
 
             $db->transComplete();
@@ -362,7 +362,7 @@ class AdminController extends BaseController
         }
     }
 
-    // Results & Reports
+    
     public function results()
     {
         $auth = $this->checkAdminAuth();
@@ -438,11 +438,11 @@ class AdminController extends BaseController
                 $row++;
             }
 
-            // Summary
+            
             $row += 2;
             $sheet->setCellValue('A' . $row, 'Total Suara: ' . $totalVotes);
 
-            // Style
+            
             $sheet->getStyle('A1:D1')->getFont()->setBold(true)->setSize(16);
             $sheet->getStyle('A5:D5')->getFont()->setBold(true);
 
@@ -463,7 +463,7 @@ class AdminController extends BaseController
         }
     }
 
-    // API Methods for AJAX
+    
     public function apiDashboardStats()
     {
         $auth = $this->checkAdminAuth();
@@ -528,7 +528,7 @@ class AdminController extends BaseController
         }
     }
 
-    // Class Management
+    
     public function classes()
     {
         $auth = $this->checkAdminAuth();
@@ -542,7 +542,7 @@ class AdminController extends BaseController
         return view('admin/classes', $data);
     }
 
-    // Period Management
+    
     public function periods()
     {
         $auth = $this->checkAdminAuth();
@@ -558,7 +558,7 @@ class AdminController extends BaseController
         return view('admin/periods', $data);
     }
 
-    // PERIOD CRUD
+    
     public function createPeriod()
     {
         $auth = $this->checkAdminAuth();
@@ -770,7 +770,7 @@ class AdminController extends BaseController
             return redirect()->back()->with('success', 'Password berhasil diubah');
         }
 
-        // Update profil
+        
         $rules = [
             'full_name' => 'required|min_length[3]|max_length[100]',
             'email' => 'required|valid_email|is_unique[admins.email,id,' . $adminId . ']'

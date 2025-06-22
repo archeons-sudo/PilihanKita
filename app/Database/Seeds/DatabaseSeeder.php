@@ -8,7 +8,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        // Run seeders in the correct order due to foreign key constraints
+        
         $this->call('AdminSeeder');
         $this->call('PeriodSeeder');
         $this->call('ClassSeeder');

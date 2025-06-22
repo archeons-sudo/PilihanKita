@@ -174,7 +174,7 @@ class StudentSeeder extends Seeder
             ]
         ];
 
-        // Using Query Builder to insert data
+        
         $this->db->table('students')->insertBatch($data);
         
         echo "Student data seeded successfully!\n";

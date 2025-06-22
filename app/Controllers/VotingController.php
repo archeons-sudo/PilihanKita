@@ -28,23 +28,23 @@ class VotingController extends BaseController
 
     public function index()
     {
-        // Check if student is logged in
+     
         if (!session()->get('student_logged_in')) {
             return redirect()->to(base_url('auth/google'))->with('error', 'Silakan login terlebih dahulu');
         }
 
-        // Check if student has already voted
+        
         if (session()->get('student_has_voted')) {
             return redirect()->to(base_url())->with('info', 'Anda sudah melakukan voting');
         }
 
-        // Get active period
+        
         $activePeriod = $this->periodModel->getActivePeriod();
         if (!$activePeriod) {
             return redirect()->to(base_url())->with('error', 'Saat ini tidak ada periode voting yang aktif');
         }
 
-        // Get active candidates
+        
         $candidates = $this->candidateModel->getActiveCandidates();
         if (empty($candidates)) {
             return redirect()->to(base_url())->with('error', 'Belum ada kandidat yang tersedia untuk voting');
@@ -68,20 +68,20 @@ class VotingController extends BaseController
     {
         $db = \Config\Database::connect();
         try {
-            // Check if student is logged in
+            
             if (!session()->get('student_logged_in')) {
                 log_message('error', 'Voting: Sesi login siswa berakhir');
                 throw new \Exception('Sesi login telah berakhir');
             }
 
-            // Ensure student_id is present in session
+            
             $studentId = session()->get('student_id');
             if (!$studentId) {
                 log_message('error', 'Voting: Student ID not found in session');
                 throw new \Exception('Sesi login siswa tidak ditemukan. Silakan login ulang.');
             }
 
-            // Check if student has already voted
+            
             $student = $this->studentModel->findStudent($studentId);
             log_message('debug', 'Voting: Data student = ' . json_encode($student));
             log_message('debug', 'Voting: Student ID = ' . $studentId);
@@ -92,13 +92,13 @@ class VotingController extends BaseController
                 throw new \Exception('Data siswa tidak ditemukan');
             }
 
-            // Check if has_voted field exists and is true
+            
             if (isset($student['has_voted']) && $student['has_voted']) {
                 log_message('error', 'Voting: Siswa sudah voting sebelumnya');
                 throw new \Exception('Anda sudah melakukan voting sebelumnya');
             }
 
-            // Validate input
+            
             $candidateId = $this->request->getPost('candidate_id');
             log_message('debug', 'Voting: candidate_id = ' . $candidateId);
             if (!$candidateId) {
@@ -106,7 +106,7 @@ class VotingController extends BaseController
                 throw new \Exception('Silakan pilih kandidat');
             }
 
-            // Verify candidate exists and is active
+            
             $candidate = $this->candidateModel->find($candidateId);
             log_message('debug', 'Voting: Data kandidat = ' . json_encode($candidate));
             if (!$candidate || !$candidate['is_active']) {
@@ -114,7 +114,7 @@ class VotingController extends BaseController
                 throw new \Exception('Kandidat tidak valid');
             }
 
-            // Get active period
+            
             $activePeriod = $this->periodModel->getActivePeriod();
             log_message('debug', 'Voting: Data periode aktif = ' . json_encode($activePeriod));
             if (!$activePeriod || $candidate['period_id'] != $activePeriod['id']) {
@@ -122,10 +122,10 @@ class VotingController extends BaseController
                 throw new \Exception('Kandidat tidak tersedia untuk periode voting saat ini');
             }
 
-            // Start database transaction
+            
             $db->transStart();
 
-            // Create vote record
+            
             $voteData = [
                 'student_id' => $studentId,
                 'candidate_id' => $candidateId,
@@ -144,7 +144,7 @@ class VotingController extends BaseController
                 throw new \Exception('Gagal menyimpan vote');
             }
 
-            // Update candidate vote count
+            
             $incResult = $this->candidateModel->incrementVoteCount($candidateId);
             log_message('debug', 'Voting: incrementVoteCount = ' . json_encode($incResult));
             if (!$incResult) {
@@ -152,7 +152,7 @@ class VotingController extends BaseController
                 throw new \Exception('Gagal menambah jumlah vote kandidat');
             }
 
-            // Mark student as voted
+            
             $markResult = $this->studentModel->markAsVoted($studentId);
             log_message('debug', 'Voting: markAsVoted = ' . json_encode($markResult));
             if (!$markResult) {
@@ -160,7 +160,7 @@ class VotingController extends BaseController
                 throw new \Exception('Gagal menandai siswa sudah voting');
             }
 
-            // Commit transaction
+            
             $db->transComplete();
             log_message('debug', 'Voting: transStatus = ' . json_encode($db->transStatus()));
 
@@ -169,10 +169,10 @@ class VotingController extends BaseController
                 throw new \Exception('Terjadi kesalahan database');
             }
 
-            // Update session
+            
             session()->set('student_has_voted', true);
 
-            // Generate and store vote receipt data
+            
             $receiptData = [
                 'vote_id' => $voteId,
                 'vote_hash' => $voteData['vote_hash'],
@@ -189,7 +189,7 @@ class VotingController extends BaseController
             return redirect()->to(base_url('voting/confirmation'))->with('success', 'Vote berhasil disimpan!');
 
         } catch (\Exception $e) {
-            // Rollback transaction if still active
+            
             if ($db->transStatus() !== false) {
                 $db->transRollback();
             }
@@ -201,12 +201,12 @@ class VotingController extends BaseController
 
     public function confirmation()
     {
-        // Check if student is logged in
+        
         if (!session()->get('student_logged_in')) {
             return redirect()->to(base_url('auth/google'))->with('error', 'Silakan login terlebih dahulu');
         }
 
-        // Check if vote receipt exists
+        
         $receiptData = session()->get('vote_receipt');
         if (!$receiptData) {
             return redirect()->to(base_url())->with('error', 'Data vote tidak ditemukan');
@@ -223,18 +223,18 @@ class VotingController extends BaseController
     public function downloadReceipt()
     {
         try {
-            // Check if student is logged in
+            
             if (!session()->get('student_logged_in')) {
                 throw new \Exception('Sesi login telah berakhir');
             }
 
-            // Get receipt data
+            
             $receiptData = session()->get('vote_receipt');
             if (!$receiptData) {
                 throw new \Exception('Data receipt tidak ditemukan');
             }
 
-            // Generate PDF
+            
             $html = $this->generateReceiptHTML($receiptData);
             
             $options = new Options();
@@ -247,10 +247,10 @@ class VotingController extends BaseController
             $dompdf->setPaper('A4', 'portrait');
             $dompdf->render();
 
-            // Generate filename
+            
             $filename = 'voting_receipt_' . $receiptData['student_nis'] . '_' . date('Y-m-d_H-i-s') . '.pdf';
 
-            // Send PDF to browser
+            
             $dompdf->stream($filename, ['Attachment' => true]);
 
         } catch (\Exception $e) {

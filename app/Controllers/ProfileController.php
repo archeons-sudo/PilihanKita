@@ -18,25 +18,25 @@ class ProfileController extends BaseController
 
     public function index()
     {
-        // Check if user is logged in
+        
         if (!session()->get('user_id')) {
-            // Try to detect user type from other session keys
+            
             if (session()->get('student_logged_in')) {
                 return redirect()->to('/auth/google');
             }
-            // Default: redirect to homepage
+            
             return redirect()->to('/');
         }
 
         $userType = session()->get('user_type');
         $userId = session()->get('user_id');
 
-        // Only allow student
+        
         if ($userType === 'student') {
             return $this->studentProfile($userId);
         }
 
-        // If not student, redirect to home
+        
         return redirect()->to('/');
     }
 
@@ -49,13 +49,13 @@ class ProfileController extends BaseController
             return redirect()->to('/auth/google')->with('error', 'Student data not found');
         }
 
-        // Get student's voting history
+        
         $votingHistory = $this->voteModel->getVotingHistoryByStudent($studentId);
         
-        // Get current active period
+        
         $activePeriod = $this->voteModel->getActivePeriod();
         
-        // Check if student has voted in current period
+        
         $hasVoted = false;
         $voteReceipt = null;
         if ($activePeriod) {
@@ -122,7 +122,7 @@ class ProfileController extends BaseController
         try {
             $this->studentModel->update($studentId, $data);
             
-            // Update session data
+            
             session()->set('user_name', $data['name']);
             session()->set('user_email', $data['email']);
 
@@ -158,7 +158,7 @@ class ProfileController extends BaseController
             ]);
         }
 
-        // Only for student (admin change password via dashboard/settings)
+        
         return $this->response->setJSON([
             'success' => false,
             'message' => 'Change password only available for students.'
@@ -185,7 +185,7 @@ class ProfileController extends BaseController
             return redirect()->to('/profile')->with('error', 'Vote receipt not found');
         }
 
-        // Map receipt data to match VotingController structure
+        
         $receiptData = [
             'vote_id' => $voteReceipt['vote_id'],
             'vote_hash' => $voteReceipt['vote_hash'],
@@ -197,7 +197,7 @@ class ProfileController extends BaseController
             'vote_time' => isset($voteReceipt['vote_date']) ? $voteReceipt['vote_date'] : '',
         ];
 
-        // Use the same HTML generator as VotingController
+        
         $votingController = new \App\Controllers\VotingController();
         $html = $votingController->generateReceiptHTML($receiptData);
 

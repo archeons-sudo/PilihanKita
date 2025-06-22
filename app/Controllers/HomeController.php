@@ -46,10 +46,10 @@ class HomeController extends BaseController
 
     public function candidates()
     {
-        // Get active period
+        
         $activePeriod = $this->periodModel->getActivePeriod();
         
-        // Get active candidates with detailed information
+        
         $candidates = $this->candidateModel->getActiveCandidates();
         
         $data = [
@@ -61,7 +61,7 @@ class HomeController extends BaseController
         return view('public/candidates', $data);
     }
 
-    // API Endpoints for AJAX calls
+    
     public function apiVotingResults()
     {
         try {

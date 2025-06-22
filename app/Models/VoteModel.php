@@ -119,7 +119,7 @@ class VoteModel extends Model
 
     public function castVote($studentId, $candidateId, $periodId, $ipAddress = null, $userAgent = null)
     {
-        // Check if student has already voted
+        
         if ($this->hasStudentVoted($studentId, $periodId)) {
             return ['success' => false, 'message' => 'You have already voted in this period'];
         }
@@ -136,7 +136,7 @@ class VoteModel extends Model
         $db->transStart();
 
         try {
-            // Insert vote record
+            
             $voteId = $this->insert($voteData);
             
             if (!$voteId) {
@@ -144,14 +144,14 @@ class VoteModel extends Model
                 return ['success' => false, 'message' => 'Failed to record vote'];
             }
 
-            // Update candidate vote count
+            
             $candidateModel = new \App\Models\CandidateModel();
             if (!$candidateModel->incrementVoteCount($candidateId)) {
                 $db->transRollback();
                 return ['success' => false, 'message' => 'Failed to update vote count'];
             }
 
-            // Mark student as voted
+            
             $studentModel = new \App\Models\StudentModel();
             if (!$studentModel->markAsVoted($studentId)) {
                 $db->transRollback();
@@ -164,7 +164,7 @@ class VoteModel extends Model
                 return ['success' => false, 'message' => 'Transaction failed'];
             }
 
-            // Get vote details for receipt
+            
             $vote = $this->find($voteId);
             
             return [
@@ -199,7 +199,7 @@ class VoteModel extends Model
                     ->findAll();
     }
 
-    // New methods for profile functionality
+    
     public function getVotingHistoryByStudent($studentId)
     {
         return $this->select('votes.*, periods.name as period_name, periods.id as period_id, 

@@ -25,7 +25,7 @@ class AuthController extends BaseController
     // Google OAuth Login
     public function google()
     {
-        // If already logged in, redirect to appropriate page
+        
         if (session()->get('student_logged_in')) {
             return redirect()->to(base_url('voting'));
         }
@@ -105,7 +105,7 @@ class AuthController extends BaseController
 
     public function verify()
     {
-        // Check if Google verification is in progress
+        
         if (!session()->get('google_user')) {
             return redirect()->to(base_url('auth/google'))->with('error', 'Sesi login telah berakhir');
         }
@@ -122,7 +122,7 @@ class AuthController extends BaseController
     public function processVerification()
     {
         try {
-            // Validate input
+            
             $rules = [
                 'nis' => 'required|min_length[6]|max_length[20]',
                 'class_id' => 'required|integer'
@@ -140,7 +140,7 @@ class AuthController extends BaseController
             $nis = $this->request->getPost('nis');
             $classId = $this->request->getPost('class_id');
 
-            // Check if NIS already exists
+            
             $existingStudent = $this->studentModel->getStudentByNIS($nis);
             
             if ($existingStudent) {
@@ -148,16 +148,16 @@ class AuthController extends BaseController
                     throw new \Exception('NIS sudah terdaftar dengan email lain');
                 }
                 
-                // Update existing student with Google data
+                
                 $this->studentModel->update($existingStudent['id'], [
                     'google_id' => $googleUser['id'],
                     'class_id' => $classId,
-                    'name' => $googleUser['name'] // Update name from Google
+                    'name' => $googleUser['name'] 
                 ]);
 
                 $studentId = $existingStudent['id'];
             } else {
-                // Create new student
+                
                 $studentData = [
                     'nis' => $nis,
                     'name' => $googleUser['name'],
@@ -174,10 +174,10 @@ class AuthController extends BaseController
                 }
             }
 
-            // Get student data with class
+            
             $student = $this->studentModel->getStudentWithClass($studentId);
 
-            // Set session
+            
             session()->set([
                 'user_id'             => $studentId,
                 'student_id'          => $studentId,
@@ -190,7 +190,7 @@ class AuthController extends BaseController
                 'student_has_voted'   => $student['has_voted']
             ]);
 
-            // Remove temporary Google session
+            
             session()->remove(['google_user', 'google_verified']);
 
             return redirect()->to(base_url())->with('success', 'Verifikasi berhasil! Selamat datang, ' . $student['name']);
@@ -203,7 +203,7 @@ class AuthController extends BaseController
 
     public function logout()
     {
-        // Hancurkan semua data sesi
+        
         session()->destroy();
 
         return redirect()->to(base_url())->with('success', 'Anda berhasil logout.');
@@ -226,7 +226,7 @@ class AuthController extends BaseController
         return view('auth/profile', $data);
     }
 
-    // Admin Authentication
+    
     public function adminLogin()
     {
         $data = [
@@ -270,7 +270,7 @@ class AuthController extends BaseController
                 return redirect()->back()->withInput()->with('error', 'Akun admin tidak aktif');
             }
 
-            // Set admin session
+            
             session()->set([
                 'admin_logged_in' => true,
                 'admin_id' => $admin['id'],
@@ -279,7 +279,7 @@ class AuthController extends BaseController
                 'admin_role' => $admin['role']
             ]);
 
-            // Update last login
+            
             $updateResult = $this->adminModel->update($admin['id'], ['last_login' => date('Y-m-d H:i:s')]);
             log_message('debug', 'Update last_login result: ' . json_encode($updateResult));
 

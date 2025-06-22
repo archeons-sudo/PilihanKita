@@ -38,7 +38,7 @@ class PeriodSeeder extends Seeder
             ]
         ];
 
-        // Using Query Builder to insert data
+        
         $this->db->table('periods')->insertBatch($data);
         
         echo "Period data seeded successfully!\n";
