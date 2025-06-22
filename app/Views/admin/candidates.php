@@ -48,7 +48,10 @@
                                         <td><?= esc($candidate['period_name']) ?></td>
                                         <td>
                                             <a href="<?= base_url('admin-system/candidates/edit/' . $candidate['id']) ?>" class="btn btn-sm btn-warning me-1"><i class="bi bi-pencil"></i></a>
-                                            <a href="<?= base_url('admin-system/candidates/delete/' . $candidate['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus kandidat ini?')"><i class="bi bi-trash"></i></a>
+                                            <form action="<?= base_url('admin-system/candidates/delete/' . $candidate['id']) ?>" method="post" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus kandidat ini?')">
+                                                <?= csrf_field() ?>
+                                                <button type="submit" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                                            </form>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
