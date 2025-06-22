@@ -265,7 +265,7 @@ class VotingController extends BaseController
         return hash('sha256', $data);
     }
 
-    private function generateReceiptHTML($receipt)
+    public function generateReceiptHTML($receipt)
     {
         $html = '
         <!DOCTYPE html>

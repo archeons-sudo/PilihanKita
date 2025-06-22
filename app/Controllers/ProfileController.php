@@ -172,7 +172,6 @@ class ProfileController extends BaseController
         }
 
         $studentId = session()->get('user_id');
-        
         if (!$periodId) {
             $activePeriod = $this->voteModel->getActivePeriod();
             if (!$activePeriod) {
@@ -182,20 +181,32 @@ class ProfileController extends BaseController
         }
 
         $voteReceipt = $this->voteModel->getVoteReceipt($studentId, $periodId);
-        
         if (!$voteReceipt) {
             return redirect()->to('/profile')->with('error', 'Vote receipt not found');
         }
 
-        // Generate PDF receipt
+        // Map receipt data to match VotingController structure
+        $receiptData = [
+            'vote_id' => $voteReceipt['vote_id'],
+            'vote_hash' => $voteReceipt['vote_hash'],
+            'student_name' => $voteReceipt['student_name'],
+            'student_nis' => $voteReceipt['student_nis'],
+            'student_class' => $voteReceipt['class_name'],
+            'candidate_name' => $voteReceipt['candidate_name'],
+            'period_name' => $voteReceipt['period_name'],
+            'vote_time' => isset($voteReceipt['vote_date']) ? $voteReceipt['vote_date'] : '',
+        ];
+
+        // Use the same HTML generator as VotingController
+        $votingController = new \App\Controllers\VotingController();
+        $html = $votingController->generateReceiptHTML($receiptData);
+
         $dompdf = new \Dompdf\Dompdf();
-        $html = view('profile/vote_receipt_pdf', ['receipt' => $voteReceipt]);
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
         $filename = 'vote_receipt_' . $studentId . '_' . $periodId . '.pdf';
-        
         return $dompdf->stream($filename);
     }
 } 
